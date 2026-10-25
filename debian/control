@@ -3,7 +3,7 @@ Section: x11
 Priority: optional
 Maintainer: Lingmo OS Team <team@lingmo.org>
 Build-Depends: cmake (>= 3.22),
-               debhelper-compat (= 14),
+               debhelper-compat (= 13),
                lingmo-sdk,
                libpam0g-dev,
                libsystemd-dev
