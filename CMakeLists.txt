@@ -13,7 +13,7 @@ include(GNUInstallDirs)
 option(BUILD_TESTING "Build the test suite" OFF)
 include(CTest)
 
-find_package(LingmoToolkit REQUIRED)
+find_package(LingmoSDK REQUIRED)
 find_library(PAM_LIBRARY pam)
 if(NOT PAM_LIBRARY)
     message(FATAL_ERROR "lingmo-dm needs libpam")
@@ -23,7 +23,7 @@ set(DM_HELPER_PATH ${CMAKE_INSTALL_FULL_LIBEXECDIR}/lingmo-dm-helper)
 set(DM_SESSION_WRAPPER ${CMAKE_INSTALL_FULL_LIBEXECDIR}/lingmo-dm-session)
 
 add_library(lingmo-dm-common STATIC common/wire.cpp)
-target_link_libraries(lingmo-dm-common PUBLIC Lingmo::ToolkitBase)
+target_link_libraries(lingmo-dm-common PUBLIC Lingmo::SDKBase)
 
 add_executable(lingmo-dm
     daemon/backgrounds.cpp
