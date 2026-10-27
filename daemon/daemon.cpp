@@ -97,7 +97,7 @@ bool Daemon::start()
 {
     const auto greeter = uidOf(m_config.greeterUser);
     if (!greeter) {
-        CF_CRITICAL(base::LogCategory::defaultCategory()) << "No login screen user" << m_config.greeterUser;
+        LM_CRITICAL(base::LogCategory::defaultCategory()) << "No login screen user" << m_config.greeterUser;
         return false;
     }
 
@@ -105,7 +105,7 @@ bool Daemon::start()
     std::filesystem::create_directories(m_config.runtimeDirectory, error);
     const std::string socket = m_config.runtimeDirectory + "/greeter.sock";
     if (!m_server.listen(socket, *greeter)) {
-        CF_CRITICAL(base::LogCategory::defaultCategory()) << "Cannot listen on" << socket;
+        LM_CRITICAL(base::LogCategory::defaultCategory()) << "Cannot listen on" << socket;
         return false;
     }
 
@@ -121,7 +121,7 @@ bool Daemon::start()
                             [this](base::dbus::MethodCall &call) { setBackgroundColor(call); });
     }
     if (!m_bus || !m_object->publish() || !m_bus->requestName("org.lingmo.DisplayManager"))
-        CF_WARNING(base::LogCategory::defaultCategory())
+        LM_WARNING(base::LogCategory::defaultCategory())
                 << "Cannot register org.lingmo.DisplayManager; sessions will end on screen";
 
     if (bootSplashRunning()) {
@@ -154,7 +154,7 @@ bool Daemon::autologin()
     const std::string &id = m_config.autologinSession.empty() ? m_config.defaultSession : m_config.autologinSession;
     const auto entry = findSession(m_config.sessionDirectories, id);
     if (!entry) {
-        CF_WARNING(base::LogCategory::defaultCategory()) << "No session" << id << "to log in to automatically";
+        LM_WARNING(base::LogCategory::defaultCategory()) << "No session" << id << "to log in to automatically";
         return false;
     }
 
@@ -170,7 +170,7 @@ bool Daemon::autologin()
         launchSession(start);
     };
     login->onFailed = [this, login](bool, const std::string &message) {
-        CF_WARNING(base::LogCategory::defaultCategory()) << "Automatic login:" << message;
+        LM_WARNING(base::LogCategory::defaultCategory()) << "Automatic login:" << message;
         if (m_login.get() == login) {
             release(m_login);
             startGreeter();
@@ -208,7 +208,7 @@ void Daemon::startGreeter()
         showGreeter();
     };
     m_greeter->onFailed = [](bool, const std::string &message) {
-        CF_WARNING(base::LogCategory::defaultCategory()) << "Login screen:" << message;
+        LM_WARNING(base::LogCategory::defaultCategory()) << "Login screen:" << message;
     };
     m_greeter->onFinished = [this] { onGreeterFinished(); };
 
@@ -237,7 +237,7 @@ void Daemon::showGreeter()
         }
 
         // Never switch to a VT nobody took; restart the login screen instead.
-        CF_WARNING(base::LogCategory::defaultCategory())
+        LM_WARNING(base::LogCategory::defaultCategory())
                 << "Cannot switch to the login screen on VT" << m_config.greeterVt;
         greeter->terminate();
     });
@@ -471,7 +471,7 @@ void Daemon::launchSession(PendingStart start)
     session->onQuestion = nullptr;
     session->onAuthenticated = nullptr;
     session->onFailed = [](bool, const std::string &message) {
-        CF_WARNING(base::LogCategory::defaultCategory()) << "Session:" << message;
+        LM_WARNING(base::LogCategory::defaultCategory()) << "Session:" << message;
     };
     session->onStarted = [this, session](const std::string &id) {
         whenControlled(session, m_config.sessionVt, [this, session, id](bool controlled) {
@@ -480,7 +480,7 @@ void Daemon::launchSession(PendingStart start)
 
             // Never switch to a VT nobody took; end the session instead.
             if (!controlled || !activateSession(id)) {
-                CF_WARNING(base::LogCategory::defaultCategory())
+                LM_WARNING(base::LogCategory::defaultCategory())
                         << "Cannot switch to the session on VT" << m_config.sessionVt << "- ending it";
                 session->terminate();
                 return;

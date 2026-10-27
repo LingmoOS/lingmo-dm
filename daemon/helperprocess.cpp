@@ -24,7 +24,7 @@ HelperProcess::HelperProcess()
 {
     m_stopDeadline.setSingleShot(true);
     m_stopDeadline.onTimeout = [this] {
-        CF_WARNING(base::LogCategory::defaultCategory()) << "The login helper did not stop; killing it";
+        LM_WARNING(base::LogCategory::defaultCategory()) << "The login helper did not stop; killing it";
         m_process.kill();
     };
 

@@ -74,7 +74,7 @@ bool activateSession(const std::string &sessionId)
                                     "/org/freedesktop/login1", "org.freedesktop.login1.Manager");
     const base::dbus::Reply reply = manager.call("ActivateSession", sessionId);
     if (reply.isError())
-        CF_WARNING(base::LogCategory::defaultCategory())
+        LM_WARNING(base::LogCategory::defaultCategory())
                 << "Cannot activate session" << sessionId << reply.error().message;
 
     return !reply.isError();

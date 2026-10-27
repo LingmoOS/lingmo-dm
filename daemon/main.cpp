@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     parser.process(argc, argv);
 
     if (geteuid() != 0) {
-        CF_CRITICAL(base::LogCategory::defaultCategory()) << "lingmo-dm has to run as root";
+        LM_CRITICAL(base::LogCategory::defaultCategory()) << "lingmo-dm has to run as root";
         return 1;
     }
 
