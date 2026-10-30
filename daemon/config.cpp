@@ -5,15 +5,25 @@
 
 #include <unistd.h>
 
+#include <algorithm>
+#include <filesystem>
+#include <string_view>
+#include <system_error>
+#include <vector>
+
 using namespace Lingmo;
 
 namespace dm {
 
-Config Config::load(const std::string &path)
+namespace {
+
+// Reads one configuration file over the values already collected. The first
+// boot OOBE and the live image still write sddm-style files, so the same keys
+// are accepted from there.
+void applySettings(const std::string &path, Config &config)
 {
-    Config config;
     if (access(path.c_str(), F_OK) != 0)
-        return config;
+        return;
 
     const base::Settings settings(path);
 
@@ -35,6 +45,38 @@ Config Config::load(const std::string &path)
 
     config.runtimeDirectory = settings.stringValue("Daemon/RuntimeDirectory", config.runtimeDirectory);
     config.statePath = settings.stringValue("Daemon/StatePath", config.statePath);
+}
+
+} // namespace
+
+Config Config::load(const std::string &path)
+{
+    Config config;
+
+    // sddm compatibility, lowest priority first: the distribution's own file
+    // last. This is what the OOBE (oobe.sh) and the live image write.
+    applySettings("/etc/sddm.conf", config);
+
+    std::error_code error;
+    std::vector<std::string> compatibilityFiles;
+    for (const auto &entry : std::filesystem::directory_iterator(
+                 "/etc/sddm.conf.d", std::filesystem::directory_options::skip_permission_denied, error)) {
+        if (error)
+            break;
+        if (entry.is_regular_file() && entry.path().extension() == ".conf")
+            compatibilityFiles.push_back(entry.path().string());
+    }
+    std::sort(compatibilityFiles.begin(), compatibilityFiles.end());
+    for (const auto &file : compatibilityFiles)
+        applySettings(file, config);
+
+    applySettings(path, config);
+
+    // sddm writes the session with its desktop file suffix; the sessions here
+    // are named by the file name only, e.g. "lingmo-oobe".
+    static constexpr std::string_view desktopSuffix = ".desktop";
+    if (base::strings::endsWith(config.autologinSession, desktopSuffix))
+        config.autologinSession.resize(config.autologinSession.size() - desktopSuffix.size());
 
     return config;
 }
