@@ -13,6 +13,9 @@ struct Config {
     std::vector<std::string> greeterCommand = {"/usr/bin/lingmo-compositor", "--login"};
     std::string greeterService = "lingmo-dm-greeter";
     std::string sessionService = "lingmo-dm";
+    // A separate PAM service for passwordless autologin: skips pam_unix and
+    // common-auth, so it works whether or not the account has a password set.
+    std::string autologinService = "lingmo-dm-autologin";
     std::vector<std::string> sessionDirectories = {"/usr/local/share/wayland-sessions", "/usr/share/wayland-sessions"};
     std::string defaultSession = "lingmo-wayland";
     // Logged in without a password once per boot, to `autologinSession` or the

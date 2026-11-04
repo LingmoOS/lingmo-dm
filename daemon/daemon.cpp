@@ -183,7 +183,7 @@ bool Daemon::autologin()
         }
     };
 
-    login->login(m_config.sessionService, m_config.autologinUser, false, m_config.sessionVt);
+    login->login(m_config.autologinService, m_config.autologinUser, false, m_config.sessionVt);
     return true;
 }
 

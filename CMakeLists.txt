@@ -54,6 +54,8 @@ install(FILES data/lingmo-dm.pam DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/pa
         RENAME lingmo-dm)
 install(FILES data/lingmo-dm-greeter.pam DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/pam.d
         RENAME lingmo-dm-greeter)
+install(FILES data/lingmo-dm-autologin.pam DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/pam.d
+        RENAME lingmo-dm-autologin)
 install(FILES data/org.lingmo.DisplayManager.conf
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/dbus-1/system.d)
 foreach(unit pipewire.socket pipewire.service pipewire-pulse.socket pipewire-pulse.service
