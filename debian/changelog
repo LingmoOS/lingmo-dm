@@ -1,3 +1,9 @@
+lingmo-dm (5.0.3+lingmo5u1) unstable; urgency=medium
+
+  * Start lingmo-aurora for the Wayland greeter.
+
+ -- Lingmo OS Team <team@lingmo.org>  Fri, 13 Nov 2026 18:00:00 +0800
+
 lingmo-dm (5.0.2+lingmo5u1) unstable; urgency=medium
 
   * dm: add lingmo-dm-autologin PAM service that uses pam_permit instead

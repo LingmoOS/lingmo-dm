@@ -13,7 +13,7 @@ Homepage: https://github.com/lingmoos/lingmo-dm
 Package: lingmo-dm
 Architecture: any
 Depends: adduser,
-         lingmo-compositor,
+         lingmo-aurora,
          ${misc:Depends},
          ${shlibs:Depends}
 Description: Lingmo OS display manager

@@ -291,12 +291,12 @@ TEST_F(DisplayManagerTest, ConfigFallsBackToDefaults)
     EXPECT_EQ(defaults.greeterVt, 1);
     EXPECT_EQ(defaults.sessionVt, 2);
     EXPECT_EQ(defaults.greeterUser, "lingmo-greeter");
-    EXPECT_EQ(defaults.greeterCommand, (std::vector<std::string> {"/usr/bin/lingmo-compositor", "--login"}));
+    EXPECT_EQ(defaults.greeterCommand, (std::vector<std::string> {"/usr/bin/lingmo-aurora", "--login"}));
 
     EXPECT_TRUE(defaults.autologinUser.empty());
 
     writeFile(directory.path() + "/dm.conf",
-              "[Greeter]\nVt=8\nCommand=/usr/bin/lingmo-compositor --login --no-xwayland\n"
+              "[Greeter]\nVt=8\nCommand=/usr/bin/lingmo-aurora --login --no-xwayland\n"
               "[Session]\nVt=9\nDirectories=/a::/b\n[Daemon]\nRuntimeDirectory=/run/test\n"
               "[Autologin]\nUser=live\nSession=gnome\n");
     const dm::Config config = dm::Config::load(directory.path() + "/dm.conf");

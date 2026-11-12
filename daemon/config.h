@@ -10,7 +10,7 @@ struct Config {
     int greeterVt = 1;
     int sessionVt = 2;
     std::string greeterUser = "lingmo-greeter";
-    std::vector<std::string> greeterCommand = {"/usr/bin/lingmo-compositor", "--login"};
+    std::vector<std::string> greeterCommand = {"/usr/bin/lingmo-aurora", "--login"};
     std::string greeterService = "lingmo-dm-greeter";
     std::string sessionService = "lingmo-dm";
     // A separate PAM service for passwordless autologin: skips pam_unix and

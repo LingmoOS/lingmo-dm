@@ -6,7 +6,7 @@ session the user picks.
 ## Dependencies
 
 The base library of [lingmo-toolkit](https://github.com/lingmoos/lingmo-toolkit)
-and PAM; `lingmo-compositor` at runtime. GoogleTest for the tests.
+and PAM; `lingmo-aurora` at runtime. GoogleTest for the tests.
 
 ## Build
 
