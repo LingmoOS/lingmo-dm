@@ -173,8 +173,6 @@ bool Daemon::autologin()
             if (!oobeAutologin())
                 return false;
             id = m_config.defaultSession;
-        } else if (!oobeAutologin()) {
-            return false;
         }
     }
     const auto entry = findSession(m_config.sessionDirectories, id);
