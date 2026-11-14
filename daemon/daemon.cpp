@@ -11,6 +11,7 @@
 #include "base/logging.h"
 #include "base/paths.h"
 #include "base/process.h"
+#include "base/settings.h"
 
 #include "sessions.h"
 #include "terminal.h"
@@ -19,6 +20,21 @@ using namespace Lingmo;
 using Lingmo::i18n::tr;
 
 namespace dm {
+
+static bool oobeComplete(const std::string &user)
+{
+    const passwd *entry = getpwnam(user.c_str());
+    if (!entry || !entry->pw_dir)
+        return false;
+    const std::string marker = std::string(entry->pw_dir) + "/.config/lingmo/oobe.conf";
+    return access(marker.c_str(), F_OK) == 0;
+}
+
+static bool oobeAutologin()
+{
+    const base::Settings state("/etc/lingmo-oobe-account.conf");
+    return state.boolValue("Account/Autologin", true);
+}
 
 // How long the login screen or a session may take to open its display.
 static constexpr int kControlTimeoutMs = 10000;
@@ -151,7 +167,14 @@ bool Daemon::autologin()
         return false;
     close(fd);
 
-    const std::string &id = m_config.autologinSession.empty() ? m_config.defaultSession : m_config.autologinSession;
+    std::string id = m_config.autologinSession.empty() ? m_config.defaultSession : m_config.autologinSession;
+    if (id == "lingmo-oobe") {
+        if (oobeComplete(m_config.autologinUser)) {
+            id = m_config.defaultSession;
+        } else if (!oobeAutologin()) {
+            return false;
+        }
+    }
     const auto entry = findSession(m_config.sessionDirectories, id);
     if (!entry) {
         LM_WARNING(base::LogCategory::defaultCategory()) << "No session" << id << "to log in to automatically";
