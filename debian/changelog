@@ -1,3 +1,9 @@
+lingmo-dm (5.0.7+lingmo5u1) unstable; urgency=medium
+
+  * Launch the renamed lingmo-initial-setup session and account state file.
+
+ -- Lingmo OS Team <team@lingmo.org>  Sat, 15 Nov 2026 12:45:00 +0800
+
 lingmo-dm (5.0.6+lingmo5u1) unstable; urgency=medium
 
   * Start lingmo-aurora for the Wayland greeter.

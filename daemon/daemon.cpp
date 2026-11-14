@@ -32,7 +32,7 @@ static bool oobeComplete(const std::string &user)
 
 static bool oobeAutologin()
 {
-    const base::Settings state("/etc/lingmo-oobe-account.conf");
+    const base::Settings state("/etc/lingmo-initial-setup-account.conf");
     return state.boolValue("Account/Autologin", true);
 }
 
@@ -168,7 +168,7 @@ bool Daemon::autologin()
     close(fd);
 
     std::string id = m_config.autologinSession.empty() ? m_config.defaultSession : m_config.autologinSession;
-    if (id == "lingmo-oobe") {
+    if (id == "lingmo-initial-setup") {
         if (oobeComplete(m_config.autologinUser)) {
             if (!oobeAutologin())
                 return false;
