@@ -170,6 +170,8 @@ bool Daemon::autologin()
     std::string id = m_config.autologinSession.empty() ? m_config.defaultSession : m_config.autologinSession;
     if (id == "lingmo-oobe") {
         if (oobeComplete(m_config.autologinUser)) {
+            if (!oobeAutologin())
+                return false;
             id = m_config.defaultSession;
         } else if (!oobeAutologin()) {
             return false;

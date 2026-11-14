@@ -1,4 +1,4 @@
-lingmo-dm (5.0.4+lingmo5u1) unstable; urgency=medium
+lingmo-dm (5.0.5+lingmo5u1) unstable; urgency=medium
 
   * Start lingmo-aurora for the Wayland greeter.
   * Select the regular session after OOBE and preserve the original autologin choice.
